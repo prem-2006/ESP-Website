@@ -313,7 +313,16 @@ $j(function(){
                 input.val("");
             }
             else if(e.which==13){
-                checkInById(input.val(), function(response) {
+                var identifier = input.val();
+                var theCall = checkInById;
+                if (!/^\d+$/.test(identifier) || input.hasClass("found") || identifier === "") {
+                    var $selected = $j(".selected .checkin");
+                    if ($selected.length > 0) {
+                        identifier = $selected.data("username").replace("checkin_", "");
+                        theCall = checkIn;
+                    }
+                }
+                theCall(identifier, function(response) {
                     if (response.username) {
                         var username = response.username;
                         var tds = []
